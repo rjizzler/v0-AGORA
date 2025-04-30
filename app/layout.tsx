@@ -1,15 +1,14 @@
 import type React from "react"
-import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
+import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Crypto Chat Rooms",
-  description: "Join public chat rooms based on coin addresses",
-    generator: 'v0.dev'
+  title: "Saino",
+  description: "Enter a contract address to join or create a chat room",
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -19,11 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-        </ThemeProvider>
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   )
 }
