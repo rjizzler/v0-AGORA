@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { AlertCircle, Loader2, Send, LogIn, RefreshCw } from "lucide-react"
+import { AlertCircle, Loader2, Send, LogIn, RefreshCw, ArrowLeft } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { ErrorBoundary } from "@/components/error-boundary"
+import Link from "next/link"
 
 // Socket.io will be imported dynamically to prevent SSR issues
 let io: any = null
@@ -282,12 +282,19 @@ export default function ChatApp() {
   }
 
   return (
-    <ErrorBoundary>
-      <div className="container mx-auto max-w-4xl p-4">
-        <Card className="shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+    <div className="min-h-screen bg-black text-white p-4">
+      <div className="container mx-auto max-w-4xl">
+        <div className="flex items-center mb-6">
+          <Link href="/" className="flex items-center text-red-500 hover:text-red-400 transition">
+            <ArrowLeft className="h-5 w-5 mr-2" />
+            Back to Home
+          </Link>
+        </div>
+
+        <Card className="shadow-lg bg-[#1E1E1E] border-red-600">
+          <CardHeader className="bg-gradient-to-r from-red-900 to-red-700 text-white">
             <CardTitle className="flex items-center justify-between">
-              {!joined ? "Join a Crypto Chat Room" : `Chatroom: ${coinAddress}`}
+              {!joined ? "Join an AGORA Chatroom" : `Chatroom: ${coinAddress}`}
               {isConnected ? (
                 <Badge variant="outline" className="bg-green-600 text-white border-green-400">
                   Connected
@@ -306,7 +313,7 @@ export default function ChatApp() {
             {!joined ? (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label htmlFor="username" className="text-sm font-medium">
+                  <label htmlFor="username" className="text-sm font-medium text-gray-300">
                     Your Display Name
                   </label>
                   <Input
@@ -315,12 +322,13 @@ export default function ChatApp() {
                     placeholder="Enter your display name"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    className="bg-[#2A2A2A] border-gray-700 text-white"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="coinAddress" className="text-sm font-medium">
-                    Coin Address / Chat Room
+                  <label htmlFor="coinAddress" className="text-sm font-medium text-gray-300">
+                    Coin or Contract Address
                   </label>
                   <div className="flex space-x-2">
                     <Input
@@ -329,8 +337,13 @@ export default function ChatApp() {
                       placeholder="Enter coin address (e.g., BTC, ETH, SOL)"
                       value={coinAddress}
                       onChange={(e) => setCoinAddress(e.target.value)}
+                      className="bg-[#2A2A2A] border-gray-700 text-white"
                     />
-                    <Button onClick={joinRoom} disabled={!isConnected || isConnecting} className="whitespace-nowrap">
+                    <Button
+                      onClick={joinRoom}
+                      disabled={!isConnected || isConnecting}
+                      className="whitespace-nowrap bg-red-600 hover:bg-red-700 text-white"
+                    >
                       {isConnecting ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       ) : (
@@ -342,7 +355,7 @@ export default function ChatApp() {
                 </div>
 
                 {!isConnected && !connectionError && socketLoaded && (
-                  <Alert>
+                  <Alert className="bg-[#2A2A2A] border-gray-700 text-gray-300">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>Connection Status</AlertTitle>
                     <AlertDescription>
@@ -351,7 +364,7 @@ export default function ChatApp() {
                         variant="outline"
                         size="sm"
                         onClick={handleRetryConnection}
-                        className="ml-2"
+                        className="ml-2 border-red-600 text-red-500 hover:bg-red-900/20"
                         disabled={isConnecting}
                       >
                         {isConnecting ? (
@@ -367,7 +380,7 @@ export default function ChatApp() {
               </div>
             ) : (
               <>
-                <div className="h-[400px] overflow-y-auto border rounded-md p-4 mb-4 bg-gray-50">
+                <div className="h-[400px] overflow-y-auto border border-gray-700 rounded-md p-4 mb-4 bg-[#2A2A2A]">
                   {messages.length === 0 ? (
                     <div className="flex items-center justify-center h-full text-gray-500">
                       No messages yet. Start the conversation!
@@ -378,7 +391,7 @@ export default function ChatApp() {
                         <div key={i} className={`flex ${msg.isOwnMessage ? "justify-end" : "justify-start"}`}>
                           <div className={`flex max-w-[80%] ${msg.isOwnMessage ? "flex-row-reverse" : "flex-row"}`}>
                             <Avatar className={`h-8 w-8 ${msg.isOwnMessage ? "ml-2" : "mr-2"}`}>
-                              <AvatarFallback className="bg-teal-600 text-white">
+                              <AvatarFallback className="bg-red-600 text-white">
                                 {getInitials(msg.username || "User")}
                               </AvatarFallback>
                             </Avatar>
@@ -386,7 +399,7 @@ export default function ChatApp() {
                             <div>
                               <div
                                 className={`rounded-lg px-3 py-2 ${
-                                  msg.isOwnMessage ? "bg-teal-600 text-white" : "bg-gray-200 text-gray-800"
+                                  msg.isOwnMessage ? "bg-red-600 text-white" : "bg-gray-700 text-gray-200"
                                 }`}
                               >
                                 <p className="text-sm font-medium">{msg.username || "User"}</p>
@@ -407,7 +420,7 @@ export default function ChatApp() {
                 </div>
 
                 {typingUsers.length > 0 && (
-                  <div className="text-sm text-gray-500 italic mb-2 flex items-center">
+                  <div className="text-sm text-gray-400 italic mb-2 flex items-center">
                     <Loader2 className="h-3 w-3 mr-2 animate-spin" />
                     {typingUsers.join(", ")} {typingUsers.length === 1 ? "is" : "are"} typing...
                   </div>
@@ -421,8 +434,13 @@ export default function ChatApp() {
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyUp={handleTyping}
                     disabled={!isConnected}
+                    className="bg-[#2A2A2A] border-gray-700 text-white"
                   />
-                  <Button type="submit" disabled={!isConnected || message.trim() === ""}>
+                  <Button
+                    type="submit"
+                    disabled={!isConnected || message.trim() === ""}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
                     <Send className="h-4 w-4 mr-2" />
                     Send
                   </Button>
@@ -431,8 +449,8 @@ export default function ChatApp() {
             )}
           </CardContent>
 
-          <CardFooter className="bg-gray-50 text-xs text-gray-500 justify-between">
-            <span>Powered by Socket.IO and Next.js</span>
+          <CardFooter className="bg-[#121212] text-xs text-gray-500 justify-between border-t border-gray-800">
+            <span>AGORA - Decentralized Chat</span>
             <span>
               {!socketLoaded
                 ? "Loading..."
@@ -447,6 +465,6 @@ export default function ChatApp() {
           </CardFooter>
         </Card>
       </div>
-    </ErrorBoundary>
+    </div>
   )
 }
