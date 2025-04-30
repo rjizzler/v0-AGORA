@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export default function Agora() {
   return (
     <div className="min-h-screen bg-black text-white font-sans">
@@ -11,9 +13,9 @@ export default function Agora() {
           <a href="#how" className="hover:underline text-white">
             How It Works
           </a>
-          <a href="/chat" className="hover:underline text-white">
+          <Link href="/chat" className="hover:underline text-white">
             Join
-          </a>
+          </Link>
         </div>
       </nav>
 
@@ -26,11 +28,12 @@ export default function Agora() {
         <p className="text-lg md:text-xl max-w-xl mb-6 text-gray-300">
           Where conversation meets code. Enter a decentralized chatroom by address and speak freely.
         </p>
-        <a href="/chat">
-          <button className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-full transition duration-300">
-            Enter the Chat
-          </button>
-        </a>
+        <Link
+          href="/chat"
+          className="bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-6 rounded-full transition duration-300"
+        >
+          Enter the Chat
+        </Link>
       </section>
 
       {/* Features Section */}
